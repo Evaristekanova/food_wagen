@@ -1,7 +1,7 @@
 export interface Meal {
   id: string;
   name: string;
-  restaurantName: string;
+  restaurantName: string | Restaurant;
   avatar: string;
   logo: string;
   image: string;
@@ -10,4 +10,10 @@ export interface Meal {
   status: "Open" | "Closed";
   Price: string;
   createdAt: string;
+}
+
+export interface Restaurant {
+  name: string;
+  logo: string;
+  status: string;
 }

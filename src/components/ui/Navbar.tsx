@@ -17,7 +17,7 @@ const Navbar = ({ openModal }: { openModal: () => void }) => {
         />
       </Link>
       <Button
-        className="bg-food-yellow-1 text-white px-4 py-2 rounded-md font-bold cursor-pointer hover:bg-food-yellow-2 transition-all duration-150 ease-out"
+        className="bg-food-yellow-1 text-white px-4 py-2 rounded-md font-bold cursor-pointer hover:bg-food-yellow-2 transition-all duration-150 ease-out shadow-lg shadow-food-yellow-1/50"
         onClick={() => {
           openModal();
           toast.success("Meal added successfully");

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Source_Sans_3 } from "next/font/google";
 import "./globals.css";
-import { Providers } from "./components/Provider";
+import { Providers } from "@/src/components/Provider";
 
 const sourceSansPro = Source_Sans_3({
   variable: "--font-source-sans-pro",

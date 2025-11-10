@@ -1,17 +1,22 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Input } from "../ui/CustomInput";
 import { Button } from "../ui/Button";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  useCreateMeal,
+  useMealById,
+  useUpdateMeal,
+} from "@/src/hooks/useMeal/useMeal";
+import Loader from "../ui/Loader";
+import { Meal } from "@/src/types/meal";
+import { useQueryClient } from "@tanstack/react-query";
 
 const schema = z.object({
   name: z
     .string()
-    .min(3, { message: "Name must be at least 3 characters long!" })
-    .regex(/^[A-Za-z\s]+$/, {
-      message: "Name can only contain letters and spaces!",
-    }),
+    .min(3, { message: "Name must be at least 3 characters long!" }),
   foodRating: z
     .number()
     .min(1, { message: "Food rating must be in the range of 1-5!" })
@@ -30,11 +35,17 @@ const schema = z.object({
 
 type Schema = z.infer<typeof schema>;
 
-const MealForm: React.FC<{ closeModal: () => void }> = ({ closeModal }) => {
+interface MealFormProps {
+  onClose: () => void;
+  isEdit: string | null;
+}
+const MealForm: React.FC<MealFormProps> = ({ onClose, isEdit }) => {
+  const queryClient = useQueryClient();
   const {
     register,
     handleSubmit,
     reset,
+    setValue,
     formState: { errors },
   } = useForm<Schema>({
     resolver: zodResolver(schema),
@@ -47,11 +58,71 @@ const MealForm: React.FC<{ closeModal: () => void }> = ({ closeModal }) => {
     },
   });
 
+  const { mealByIdData, isLoadingMealById, errorMealById } = useMealById(
+    isEdit || "",
+    !!isEdit ? true : false
+  );
+  const {
+    createMeal,
+    isLoadingCreateMeal,
+    errorCreateMeal,
+    isSuccessCreateMeal,
+  } = useCreateMeal();
+  const {
+    updateMeal,
+    isLoadingUpdateMeal,
+    errorUpdateMeal,
+    isSuccessUpdateMeal,
+  } = useUpdateMeal(isEdit || "");
+
+  useEffect(() => {
+    if (isEdit) {
+      setValue("name", mealByIdData?.name || "");
+      setValue("foodRating", mealByIdData?.rating || 0);
+      setValue(
+        "restaurantName",
+        (typeof mealByIdData?.restaurantName === "string"
+          ? mealByIdData?.restaurantName
+          : mealByIdData?.restaurantName?.name) || ""
+      );
+      setValue("restaurantLogo", mealByIdData?.logo || "");
+      setValue("restaurantStatus", mealByIdData?.open ? "open" : "closed");
+    }
+  }, [isEdit, mealByIdData, setValue]);
+
+  useEffect(() => {
+    if (isSuccessCreateMeal || isSuccessUpdateMeal) {
+      queryClient.invalidateQueries({ queryKey: ["meals"] });
+      reset();
+      onClose();
+    }
+  }, [isSuccessCreateMeal, isSuccessUpdateMeal, onClose, reset]);
+
   const onSubmit = (data: Schema) => {
-    console.log(data);
-    reset();
-    closeModal();
+    if (isEdit) {
+      updateMeal({
+        id: isEdit,
+        name: data.name,
+        rating: data.foodRating,
+        restaurantName: data.restaurantName,
+        logo: data.restaurantLogo,
+        open: data.restaurantStatus === "open",
+      } as Meal);
+    } else {
+      reset();
+      createMeal({
+        name: data.name,
+        rating: data.foodRating,
+        restaurantName: data.restaurantName,
+        logo: data.restaurantLogo,
+        open: data.restaurantStatus === "open",
+      } as Meal);
+    }
   };
+
+  if (isLoadingMealById) {
+    return <Loader />;
+  }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -67,6 +138,7 @@ const MealForm: React.FC<{ closeModal: () => void }> = ({ closeModal }) => {
           fieldName="foodRating"
           inputType="number"
           placeholder="Food rating (1-5)"
+          step="0.1"
           {...register("foodRating", { valueAsNumber: true })}
           error={errors.foodRating?.message}
         />
@@ -95,12 +167,14 @@ const MealForm: React.FC<{ closeModal: () => void }> = ({ closeModal }) => {
           <Button
             className="bg-food-yellow-1 text-white px-4 py-3 rounded-md font-bold cursor-pointer"
             type="submit"
+            isLoading={isLoadingCreateMeal || isLoadingUpdateMeal}
+            disabled={isLoadingCreateMeal || isLoadingUpdateMeal}
           >
-            Add
+            {isEdit ? "Save" : "Add"}
           </Button>
           <Button
             className="border-2 border-food-yellow-1 text-black px-4 py-3 rounded-md font-bold cursor-pointer"
-            onClick={closeModal}
+            onClick={onClose}
             type="button"
           >
             Cancel
