@@ -9,7 +9,6 @@ import Footer from "@/src/components/ui/Footer";
 import Header from "@/src/components/Header";
 import { useQueryClient } from "@tanstack/react-query";
 
-// Lazy load modals and forms - only load when needed
 const Modal = dynamic(
   () =>
     import("@/src/components/ui/Modal/Modal").then((mod) => ({
@@ -17,7 +16,7 @@ const Modal = dynamic(
     })),
   {
     ssr: false,
-    loading: () => null, // Don't show loading state for modals
+    loading: () => null,
   }
 );
 const MealForm = dynamic(() => import("@/src/components/forms/MealForm"), {
@@ -55,9 +54,7 @@ const HomePage: React.FC = () => {
 
   useEffect(() => {
     if (isSuccessDeleteMealById) {
-      // Close dialog after successful delete
       queryClient.invalidateQueries({ queryKey: ["meals"] });
-      // Use setTimeout to avoid cascading renders
       setTimeout(() => {
         setIsEdit(undefined);
         setIsConfirmDialogOpen(false);

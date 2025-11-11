@@ -15,6 +15,30 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useModal } from "@/src/hooks/useModal";
 import DropdownField from "../ui/ComboBox";
 
+// const imageUrlValidator = z
+//   .string()
+//   .min(1, { message: "Image is required!" })
+//   .url({ message: "Must be a valid URL!" })
+//   .refine((url) => url.startsWith("https://"), {
+//     message: "URL must use HTTPS protocol!",
+//   })
+//   .refine(
+//     (url) => {
+//       const hasImageExtension =
+//         /\.(jpg|jpeg|png|gif|webp|svg|bmp|ico)(\?.*)?$/i.test(url);
+//       return hasImageExtension;
+//     },
+//     { message: "URL must be a valid image (jpg, png, gif, webp, svg)" }
+//   );
+
+const imageUrlValidator = z
+  .string()
+  .min(1, { message: "Image URL is required!" })
+  .url({ message: "Must be a valid image URL!" })
+  .refine((url) => url.startsWith("https://"), {
+    message: "Image URL must use HTTPS protocol!",
+  });
+
 const schema = z.object({
   name: z
     .string()
@@ -23,30 +47,12 @@ const schema = z.object({
     .number()
     .min(1, { message: "Food rating must be in the range of 1-5!" })
     .max(5, { message: "Food rating must be in the range of 1-5!" }),
-  // restaurantName: z
-  //   .string()
-  //   .min(3, { message: "Restaurant name must be at least 3 characters long!" }),
-  logo: z
-    .string()
-    .url({ message: "Restaurant logo must be a valid URL!" })
-    .refine((url) => url.startsWith("https://"), {
-      message: "Restaurant logo must be a valid URL!",
-    }),
-  avatar: z
-    .string()
-    .url({ message: "Restaurant avatar must be a valid URL!" })
-    .refine((url) => url.startsWith("https://"), {
-      message: "Restaurant avatar must be a valid URL!",
-    }),
+  logo: imageUrlValidator,
+  avatar: imageUrlValidator,
   open: z.boolean(),
   status: z.string().refine((val) => val === "true" || val === "false", {
     message: "Please select a restaurant status!",
   }),
-  // restaurantStatus: z
-  //   .string()
-  //   .refine((val) => val === "Open Now" || val === "Closed", {
-  //     message: "Please select a restaurant status!",
-  //   }),
 });
 
 type Schema = z.infer<typeof schema>;
