@@ -12,6 +12,8 @@ import {
 import Loader from "../ui/Loader";
 import { Meal } from "@/src/types/meal";
 import { useQueryClient } from "@tanstack/react-query";
+import { useModal } from "@/src/hooks/useModal";
+import DropdownField from "../ui/ComboBox";
 
 const schema = z.object({
   name: z
@@ -26,11 +28,16 @@ const schema = z.object({
     .min(3, { message: "Restaurant name must be at least 3 characters long!" }),
   restaurantLogo: z
     .string()
+    .min(1, { message: "Restaurant logo is required!" })
     .url({ message: "Restaurant logo must be a valid URL!" })
-    .or(z.string().min(1, { message: "Restaurant logo is required!" })),
-  restaurantStatus: z.enum(["open", "closed"] as const, {
-    message: "Status must be either 'open' or 'closed'!",
-  }),
+    .refine((url) => url.startsWith("https://"), {
+      message: "URL must use HTTPS protocol",
+    }),
+  restaurantStatus: z
+    .string()
+    .refine((val) => val === "open" || val === "closed", {
+      message: "Please select a restaurant status!",
+    }),
 });
 
 type Schema = z.infer<typeof schema>;
@@ -39,12 +46,15 @@ interface MealFormProps {
   onClose: () => void;
   isEdit: string | null;
 }
+
 const MealForm: React.FC<MealFormProps> = ({ onClose, isEdit }) => {
   const queryClient = useQueryClient();
+  const { setIsEdit } = useModal();
   const {
     register,
     handleSubmit,
     reset,
+    watch,
     setValue,
     formState: { errors },
   } = useForm<Schema>({
@@ -54,29 +64,21 @@ const MealForm: React.FC<MealFormProps> = ({ onClose, isEdit }) => {
       foodRating: 0,
       restaurantName: "",
       restaurantLogo: "",
-      restaurantStatus: "open" as const,
+      restaurantStatus: undefined as unknown as string,
     },
   });
 
-  const { mealByIdData, isLoadingMealById, errorMealById } = useMealById(
+  const { mealByIdData, isLoadingMealById } = useMealById(
     isEdit || "",
-    !!isEdit ? true : false
+    !!isEdit
   );
-  const {
-    createMeal,
-    isLoadingCreateMeal,
-    errorCreateMeal,
-    isSuccessCreateMeal,
-  } = useCreateMeal();
-  const {
-    updateMeal,
-    isLoadingUpdateMeal,
-    errorUpdateMeal,
-    isSuccessUpdateMeal,
-  } = useUpdateMeal(isEdit || "");
+  const { createMeal, isLoadingCreateMeal, isSuccessCreateMeal } =
+    useCreateMeal();
+  const { updateMeal, isLoadingUpdateMeal, isSuccessUpdateMeal } =
+    useUpdateMeal(isEdit || "");
 
   useEffect(() => {
-    if (isEdit) {
+    if (isEdit && mealByIdData) {
       setValue("name", mealByIdData?.name || "");
       setValue("foodRating", mealByIdData?.rating || 0);
       setValue(
@@ -94,9 +96,17 @@ const MealForm: React.FC<MealFormProps> = ({ onClose, isEdit }) => {
     if (isSuccessCreateMeal || isSuccessUpdateMeal) {
       queryClient.invalidateQueries({ queryKey: ["meals"] });
       reset();
+      setIsEdit(undefined);
       onClose();
     }
-  }, [isSuccessCreateMeal, isSuccessUpdateMeal, onClose, reset]);
+  }, [
+    isSuccessCreateMeal,
+    isSuccessUpdateMeal,
+    onClose,
+    reset,
+    setIsEdit,
+    queryClient,
+  ]);
 
   const onSubmit = (data: Schema) => {
     if (isEdit) {
@@ -109,7 +119,6 @@ const MealForm: React.FC<MealFormProps> = ({ onClose, isEdit }) => {
         open: data.restaurantStatus === "open",
       } as Meal);
     } else {
-      reset();
       createMeal({
         name: data.name,
         rating: data.foodRating,
@@ -120,7 +129,7 @@ const MealForm: React.FC<MealFormProps> = ({ onClose, isEdit }) => {
     }
   };
 
-  if (isLoadingMealById) {
+  if (isLoadingMealById && isEdit) {
     return <Loader />;
   }
 
@@ -156,11 +165,18 @@ const MealForm: React.FC<MealFormProps> = ({ onClose, isEdit }) => {
           {...register("restaurantLogo")}
           error={errors.restaurantLogo?.message}
         />
-        <Input
-          fieldName="restaurantStatus"
-          inputType="text"
-          placeholder="Restaurant status (open/closed)"
-          {...register("restaurantStatus")}
+        <DropdownField
+          label="Restaurant status"
+          name="restaurantStatus"
+          value={watch("restaurantStatus")}
+          onChange={(value) =>
+            setValue("restaurantStatus", value as "open" | "closed")
+          }
+          options={[
+            { value: "open", label: "Open" },
+            { value: "closed", label: "Closed" },
+          ]}
+          required={true}
           error={errors.restaurantStatus?.message}
         />
         <div className="grid grid-cols-2 gap-4">

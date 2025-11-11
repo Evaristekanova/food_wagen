@@ -1,5 +1,5 @@
 import { Meal } from "@/src/types/meal";
-import { EllipsisVertical, Tag } from "lucide-react";
+import { Tag } from "lucide-react";
 import Image from "next/image";
 import React from "react";
 import { MealMenu } from "./ui/MealMenu";

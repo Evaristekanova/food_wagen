@@ -23,7 +23,7 @@ export const MealMenu = ({ id, onEdit, onDelete }: MealMenuProps) => {
       </button>
 
       {open && (
-        <div className="absolute right-0 mt-2 w-32 bg-white border border-gray-200 rounded shadow-lg z-10">
+        <div className="absolute right-0 mt-2 w-32 bg-white border border-gray-200 rounded-lg shadow-lg z-10">
           {onEdit && (
             <button
               onClick={() => onEdit?.(id)}

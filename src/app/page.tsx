@@ -1,61 +1,56 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Modal } from "@/src/components/ui/Modal/Modal";
 import { useModal } from "../hooks/useModal";
 import MealForm from "@/src/components/forms/MealForm";
 import Navbar from "@/src/components/ui/Navbar";
 import FoodSearch from "@/src/components/FoodSearch";
-import FoodCard from "@/src/components/FoodCard";
-import { Meal } from "@/src/types/meal";
 import { useDeleteMealById, useMeal } from "@/src/hooks/useMeal/useMeal";
-import Loader from "../components/ui/Loader";
 import ConfirmDialogModal from "../components/ui/Modal/ConfirmDialogModal";
+import FoodList from "../components/ui/FoodList";
 
 const HomePage: React.FC = () => {
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
   const { isOpen, openModal, closeModal, setIsEdit, isEdit } = useModal();
-  const { mealsData: meals, isLoadingMeals, errorMeals } = useMeal();
-  const {
-    deleteMealById,
-    isLoadingDeleteMealById,
-    errorDeleteMealById,
-    isSuccessDeleteMealById,
-  } = useDeleteMealById();
+  const { mealsData: meals, isLoadingMeals } = useMeal();
+  const { deleteMealById, isLoadingDeleteMealById, isSuccessDeleteMealById } =
+    useDeleteMealById();
   const onEdit = (id: string) => {
     setIsEdit(id);
     openModal();
   };
 
-  const onDelete = (id: string) => {
-    deleteMealById(id);
-    if (isSuccessDeleteMealById) {
-      setIsConfirmDialogOpen(false);
-    }
+  const onAddMeal = () => {
+    setIsEdit(undefined);
+    openModal();
   };
 
-  if (isLoadingMeals) {
-    return <Loader />;
-  }
+  const onDelete = (id: string) => {
+    setIsConfirmDialogOpen(true);
+    setIsEdit(id);
+  };
+
+  useEffect(() => {
+    if (isSuccessDeleteMealById) {
+      setTimeout(() => {
+        setIsEdit(undefined);
+        setIsConfirmDialogOpen(false);
+      }, 0);
+    }
+  }, [isSuccessDeleteMealById, setIsEdit, setIsConfirmDialogOpen]);
 
   return (
     <div className=" min-h-screen flex-col gap-4">
-      <Navbar openModal={openModal} />
+      <Navbar onAddMeal={onAddMeal} />
       <FoodSearch />
-      <section className="py-14 px-20">
-        <h1 className="text-4xl font-bold text-food-dark-gray-1 text-center">
-          Featured Meals
-        </h1>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {meals?.map((meal: Meal) => (
-            <FoodCard
-              key={meal.id}
-              meal={meal}
-              onEdit={() => onEdit(meal.id)}
-              onDelete={() => onDelete(meal.id)}
-            />
-          ))}
-        </div>
-      </section>
+
+      <FoodList
+        meals={meals || []}
+        onEdit={onEdit}
+        onDelete={onDelete}
+        isLoading={isLoadingMeals}
+      />
+
       <Modal
         isOpen={isOpen}
         onClose={closeModal}

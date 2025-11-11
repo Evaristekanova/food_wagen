@@ -6,12 +6,14 @@ import Image from "next/image";
 
 const FoodSearch = () => {
   return (
-    <div className=" bg-food-yellow-1 flex items-center justify-center max-h-[370px] overflow-hidden">
+    <div className=" bg-food-yellow-1 flex items-center justify-center max-h-[330px] overflow-hidden">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-28 p-20 relative z-10 overflow-hidden">
         <div className="col-span-2">
-          <div className="flex flex-col gap-1">
-            <h1 className="text-7xl font-bold text-white">Are you starving?</h1>
-            <p className="text-white text-lg">
+          <div className="flex flex-col gap-1 pt-3">
+            <h1 className="text-3xl sm:text-4xl font-bold text-white">
+              Are you starving?
+            </h1>
+            <p className="text-white text-sm sm:text-base mb-2">
               Within a few clicks, find meals that are accessible near you
             </p>
           </div>
