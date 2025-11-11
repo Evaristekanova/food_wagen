@@ -52,7 +52,7 @@ const DropdownField = ({
       {label && (
         <label
           htmlFor={label}
-          className="text-food-dark-gray-1 text-sm font-source-sans-pro block mb-2"
+          className="text-food-dark-gray-3 font-source-sans-pro block mb-2"
         >
           {label}
         </label>
