@@ -45,28 +45,31 @@ const FoodSearch: React.FC<FoodSearchProps> = ({
   return (
     <form
       onSubmit={handleSearch}
-      className=" flex gap-16 items-center w-full border-food-dark-gray-3 rounded-lg p-4 "
+      className="flex flex-col sm:flex-row gap-3 sm:gap-4 md:gap-16 items-stretch sm:items-center w-full border-food-dark-gray-3 rounded-lg p-3 sm:p-4"
     >
-      <div className="w-full h-[52px]">
+      <div className="w-full h-[48px] sm:h-[52px]">
         <Input
           fieldName="search"
           inputType="text"
           placeholder="Search for a meal"
-          className="h-full bg-food-white-2"
+          className="h-full bg-food-white-2 text-sm sm:text-base"
           value={localSearchQuery}
           onChange={handleInputChange}
-          icon={<SearchIcon className="w-5 h-5 text-food-dark-gray-3" />}
+          icon={
+            <SearchIcon className="w-4 h-4 sm:w-5 sm:h-5 text-food-dark-gray-3" />
+          }
         />
       </div>
 
       {/* Button */}
       <Button
         type="submit"
-        className="bg-food-orange-2 text-white px-6 py-3 rounded-md font-bold flex items-center
-                  justify-center gap-2 cursor-pointer transition-all duration-150 ease-out h-[52px] shrink-0 w-[160px]"
+        className="bg-food-orange-2 text-white px-4 sm:px-6 py-2.5 sm:py-3 rounded-md font-bold flex items-center
+                  justify-center gap-2 cursor-pointer transition-all duration-150 ease-out h-[48px] sm:h-[52px] shrink-0 w-full sm:w-[160px] text-sm sm:text-base"
       >
-        <SearchIcon className="w-5 h-5" />
-        <span>Find Meal</span>
+        <SearchIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+        <span className="hidden sm:inline">Find Meal</span>
+        <span className="sm:hidden">Search</span>
       </Button>
     </form>
   );
