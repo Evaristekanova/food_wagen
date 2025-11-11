@@ -99,6 +99,12 @@ export const useDeleteMealById = () => {
     isSuccess: isSuccessDeleteMealById,
   } = useMutation({
     mutationFn: async (id: string) => await mealService.deleteMeal(id),
+    onSuccess: () => {
+      toast.success("Meal deleted successfully!");
+    },
+    onError: (error: Error) => {
+      toast.error(`${error?.message || "Failed to delete meal"}`);
+    },
   });
   return {
     deleteMealById,

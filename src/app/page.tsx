@@ -36,6 +36,7 @@ const HomePage: React.FC = () => {
       setTimeout(() => {
         setIsEdit(undefined);
         setIsConfirmDialogOpen(false);
+        closeModal(["meals"]);
       }, 0);
     }
   }, [isSuccessDeleteMealById, setIsEdit, setIsConfirmDialogOpen]);

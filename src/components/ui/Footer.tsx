@@ -15,12 +15,12 @@ const renderFooterLinks = (links: { label: string; href: string }[]) => {
 
 const Footer: React.FC = () => {
   return (
-    <div className="bg-food-dark-gray-1 text-food-white py-14 px-22">
-      <div className="grid grid-cols-1 sm:grid-cols-2 py-4 border-b-2 border-food-dark-gray-2">
+    <div className="bg-food-dark-gray-1 text-food-white px-22">
+      <div className="grid grid-cols-1 sm:grid-cols-2 py-4 pb-6 border-b-2 border-food-dark-gray-2">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {footerLinks.map((link: FooterLink) => (
             <div key={link.label}>
-              <h3 className="text-lg font-bold">{link.label}</h3>
+              <h3 className="text-lg font-bold mb-4">{link.label}</h3>
               <ul className="flex flex-col gap-2">
                 {renderFooterLinks(link.links)}
               </ul>
@@ -28,7 +28,7 @@ const Footer: React.FC = () => {
           ))}
         </div>
         <div className=" space-y-4">
-          <h3 className="text-lg font-bold">FOLLOW US</h3>
+          <h3 className="text-lg font-bold mb-4">FOLLOW US</h3>
           <div className="grid grid-cols-3 gap-2 w-fit">
             <Link href="#" className="text-food-white">
               <Instagram className="w-6 h-6" />
@@ -43,7 +43,7 @@ const Footer: React.FC = () => {
           <p className="text-food-white text-sm">
             Receive exclusive offers in your mailbox
           </p>
-          <div className="flex items-center justify-between gap-4 border-2 border-food-dark-gray-2 rounded-md p-2">
+          <div className="flex items-center justify-between gap-4">
             <div className="w-full h-[52px]">
               <Input
                 fieldName="email"
