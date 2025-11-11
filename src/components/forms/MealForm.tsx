@@ -170,7 +170,6 @@ const MealForm: React.FC<MealFormProps> = ({ onClose, isEdit }) => {
         />
         <DropdownField
           label="Restaurant status"
-          name="restaurantStatus"
           value={watch("restaurantStatus")}
           onChange={(value) =>
             setValue("restaurantStatus", value, { shouldValidate: true })
@@ -179,7 +178,6 @@ const MealForm: React.FC<MealFormProps> = ({ onClose, isEdit }) => {
             { value: "open", label: "Open" },
             { value: "closed", label: "Closed" },
           ]}
-          required={true}
           error={errors.restaurantStatus?.message}
         />
         <div className="grid grid-cols-2 gap-4">

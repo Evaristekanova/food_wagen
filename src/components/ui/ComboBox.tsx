@@ -1,8 +1,8 @@
 "use client";
 
-import { ChevronDown, Search } from "lucide-react";
-import { useEffect, useMemo, useRef, useState } from "react";
-import { UseFormRegister, FieldValues, UseFormSetValue } from "react-hook-form";
+import { ChevronDown } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { useOutsideClick } from "@/src/hooks/useClickOutside";
 
 type OptionType = {
   label: string;
@@ -12,46 +12,25 @@ type OptionType = {
 type DropdownFieldProps = {
   label: string;
   options: OptionType[];
-  name: string;
   error?: string;
   value?: string;
   onChange?: (value: string) => void;
-  required?: boolean;
   disabled?: boolean;
-  className?: string;
 };
 
 const DropdownField = ({
   label,
   options,
-  name,
   error,
   value,
   onChange,
-  required = false,
   disabled = false,
-  className = "",
 }: DropdownFieldProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const dropdownRef = useRef<HTMLDivElement>(null);
+  const dropdownRef = useOutsideClick(() => setIsOpen(false));
 
   const selectedOption = options.find((opt) => opt.value === value);
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
-        setIsOpen(false);
-        setSearchQuery("");
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
 
   const filteredOptions = useMemo(() => {
     if (!searchQuery) return options;
