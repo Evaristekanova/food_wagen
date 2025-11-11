@@ -10,7 +10,7 @@ type OptionType = {
 };
 
 type DropdownFieldProps = {
-  label: string;
+  label?: string;
   options: OptionType[];
   error?: string;
   value?: string;
@@ -49,6 +49,14 @@ const DropdownField = ({
 
   return (
     <div className="w-full space-y-1" ref={dropdownRef}>
+      {label && (
+        <label
+          htmlFor={label}
+          className="text-food-dark-gray-1 text-sm font-source-sans-pro block mb-2"
+        >
+          {label}
+        </label>
+      )}
       <div className="relative">
         <button
           type="button"

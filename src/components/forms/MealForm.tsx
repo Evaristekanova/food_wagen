@@ -149,6 +149,7 @@ const MealForm: React.FC<MealFormProps> = ({ onClose, isEdit }) => {
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="grid grid-cols-1 gap-4 px-10">
         <Input
+          label={isEdit ? "Food Name" : undefined}
           fieldName="food-name"
           inputType="text"
           placeholder="Enter Food Name"
@@ -157,6 +158,7 @@ const MealForm: React.FC<MealFormProps> = ({ onClose, isEdit }) => {
           error={errors.name?.message}
         />
         <Input
+          label={isEdit ? "Food Rating" : undefined}
           fieldName="food-rating"
           inputType="number"
           placeholder="Enter Food Rating (1-5)"
@@ -166,6 +168,7 @@ const MealForm: React.FC<MealFormProps> = ({ onClose, isEdit }) => {
           error={errors.rating?.message}
         />
         <Input
+          label={isEdit ? "Restaurant Logo" : undefined}
           fieldName="restaurant-logo"
           inputType="text"
           placeholder="Enter Restaurant Logo (link)"
@@ -174,6 +177,7 @@ const MealForm: React.FC<MealFormProps> = ({ onClose, isEdit }) => {
           error={errors.logo?.message}
         />
         <Input
+          label={isEdit ? "Restaurant Avatar" : undefined}
           fieldName="restaurant-avatar"
           inputType="text"
           placeholder="Enter Restaurant Avatar (link)"
@@ -182,7 +186,7 @@ const MealForm: React.FC<MealFormProps> = ({ onClose, isEdit }) => {
           error={errors.avatar?.message}
         />
         <DropdownField
-          label="Restaurant Status(Open Now/Closed)"
+          label={isEdit ? "Restaurant Status(Open Now/Closed)" : undefined}
           value={watch("status")}
           onChange={(value) =>
             setValue(

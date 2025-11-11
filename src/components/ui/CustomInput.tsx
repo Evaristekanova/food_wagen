@@ -7,12 +7,22 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   error?: string;
   icon?: React.ReactNode;
   inputType?: string;
+  label?: string;
 }
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ fieldName, error, icon, className = "", inputType, ...props }, ref) => {
+  (
+    { fieldName, error, icon, className = "", inputType, label, ...props },
+    ref
+  ) => {
     return (
       <div className="w-full">
+        <label
+          htmlFor={fieldName}
+          className="text-food-dark-gray-3 font-source-sans-pro block mb-2"
+        >
+          {label}
+        </label>
         <div className="relative">
           {icon && (
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
