@@ -3,26 +3,40 @@ import { mealService } from "@/src/services/mealService";
 import { toast } from "sonner";
 import { Meal } from "@/src/types/meal";
 
-export const useMeal = () => {
+export const useMeal = (searchQuery?: string) => {
   const {
     data: mealsData,
     isPending: isLoadingMeals,
     error: errorMeals,
   } = useQuery<Meal[], Error>({
-    queryKey: ["meals"],
-    queryFn: async () => (await mealService.getMeals()) as Meal[],
+    queryKey: ["meals", searchQuery],
+    queryFn: async () =>
+      (await mealService.getMeals(searchQuery?.trim() || undefined)) as Meal[],
     meta: {
       onSuccess: () => {
-        toast.success("Meals fetched successfully!");
+        if (!searchQuery?.trim()) {
+          toast.success("Meals fetched successfully!");
+        }
       },
       onError: (error: Error) => {
-        toast.error(`${error?.message || "Failed to fetch meals"}`);
+        const is404Error =
+          error &&
+          typeof error === "object" &&
+          "response" in error &&
+          error.response &&
+          typeof error.response === "object" &&
+          "status" in error.response &&
+          (error.response as { status: number }).status === 404;
+
+        if (!is404Error) {
+          toast.error(`${error?.message || "Failed to fetch meals"}`);
+        }
       },
     },
   });
 
   return {
-    mealsData,
+    mealsData: mealsData || [],
     isLoadingMeals,
     errorMeals,
   };

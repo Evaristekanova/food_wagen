@@ -4,16 +4,17 @@ import { Modal } from "@/src/components/ui/Modal/Modal";
 import { useModal } from "../hooks/useModal";
 import MealForm from "@/src/components/forms/MealForm";
 import Navbar from "@/src/components/ui/Navbar";
-import FoodSearch from "@/src/components/FoodSearch";
 import { useDeleteMealById, useMeal } from "@/src/hooks/useMeal/useMeal";
 import ConfirmDialogModal from "@/src/components/ui/Modal/ConfirmDialogModal";
 import FoodList from "@/src/components/FoodList";
 import Footer from "@/src/components/ui/Footer";
+import Header from "@/src/components/Header";
 
 const HomePage: React.FC = () => {
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState<string>("");
   const { isOpen, openModal, closeModal, setIsEdit, isEdit } = useModal();
-  const { mealsData: meals, isLoadingMeals } = useMeal();
+  const { mealsData: meals, isLoadingMeals } = useMeal(searchQuery);
   const { deleteMealById, isLoadingDeleteMealById, isSuccessDeleteMealById } =
     useDeleteMealById();
   const onEdit = (id: string) => {
@@ -44,13 +45,14 @@ const HomePage: React.FC = () => {
   return (
     <div className=" min-h-screen flex-col gap-4">
       <Navbar onAddMeal={onAddMeal} />
-      <FoodSearch />
+      <Header searchQuery={searchQuery} onSearchChange={setSearchQuery} />
 
       <FoodList
         meals={meals || []}
         onEdit={onEdit}
         onDelete={onDelete}
         isLoading={isLoadingMeals}
+        searchQuery={searchQuery}
       />
 
       <Footer />

@@ -2,9 +2,25 @@ import { Meal } from "../types/meal";
 import { api } from "../libs/apiClient";
 
 export const mealService = {
-  getMeals: async () => {
-    const response = await api.get("Food");
-    return response.data;
+  getMeals: async (name?: string) => {
+    try {
+      const url = name ? `Food?name=${encodeURIComponent(name)}` : "Food";
+      const response = await api.get(url);
+      return response.data;
+    } catch (error: unknown) {
+      if (
+        error &&
+        typeof error === "object" &&
+        "response" in error &&
+        error.response &&
+        typeof error.response === "object" &&
+        "status" in error.response &&
+        error.response.status === 404
+      ) {
+        return [];
+      }
+      throw error;
+    }
   },
   getMealById: async (id: string) => {
     const response = await api.get<Meal>(`Food/${id}`);
