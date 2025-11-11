@@ -1,6 +1,6 @@
 "use client";
 
-import { Search } from "lucide-react";
+import { ChevronDown, Search } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { UseFormRegister, FieldValues, UseFormSetValue } from "react-hook-form";
 
@@ -75,18 +75,17 @@ const DropdownField = ({
           type="button"
           onClick={() => !disabled && setIsOpen(!isOpen)}
           disabled={disabled}
-          className={`w-full px-4 py-2.5 rounded-md text-left bg-food-white-2 truncate border-food-dark-gray-3 border
+          className={`w-full px-4 py-2.5 rounded-md text-left bg-food-white-2 truncate 
             focus:outline-none focus:border-food-dark-white-2 ${
               disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"
-            } ${error ? "border-red-500" : ""}`}
+            } ${error ? "border border-food-red-1" : ""}`}
         >
-          <span
-            className={`block truncate ${
-              !selectedOption ? "text-gray-400" : ""
-            }`}
-          >
-            {selectedOption ? selectedOption.label : `Select ${label}`}
-          </span>
+          <div className="flex items-center justify-between">
+            <span className="block truncate text-food-dark-gray-3">
+              {selectedOption ? selectedOption.label : `Select ${label}`}
+            </span>
+            <ChevronDown className="w-5 h-5" />
+          </div>
         </button>
 
         {isOpen && (
@@ -95,7 +94,7 @@ const DropdownField = ({
           rounded-md shadow-lg border-food-dark-white-2 border-2 border-food-dark-gray-3"
           >
             <div>
-              {filteredOptions.length > 0 ? (
+              {filteredOptions.length > 0 &&
                 filteredOptions.map((option) => (
                   <button
                     key={option.value}
@@ -108,18 +107,19 @@ const DropdownField = ({
                   >
                     {option.label}
                   </button>
-                ))
-              ) : (
-                <div className="px-4 py-2 text-sm text-gray-500">
-                  No options found
-                </div>
-              )}
+                ))}
             </div>
           </div>
         )}
       </div>
 
-      {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
+      {error && (
+        <p
+          className={`h-[10px] mt-2 text-sm text-food-red-1 font-source-sans-pro transition-all duration-500 ease-in-out`}
+        >
+          {error}
+        </p>
+      )}
     </div>
   );
 };

@@ -23,9 +23,11 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             name={fieldName}
             ref={ref}
             type={inputType || "text"}
-            className={`w-full py-3.5 bg-food-white-2 font-source-sans-pro outline-none rounded-md 
+            className={`w-full py-3.5  font-source-sans-pro outline-none rounded-md 
               focus:outline-none focus:border-food-dark-gray-3 
-              ${icon ? "pl-10 pr-4" : "px-4"} 
+              ${icon ? "pl-10 pr-4" : "px-4"} ${
+              error ? "border border-food-red-1" : ""
+            }
               placeholder:text-food-dark-gray-3 placeholder:text-lg ${className}`}
             {...props}
           />

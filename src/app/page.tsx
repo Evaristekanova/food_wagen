@@ -8,6 +8,7 @@ import FoodSearch from "@/src/components/FoodSearch";
 import { useDeleteMealById, useMeal } from "@/src/hooks/useMeal/useMeal";
 import ConfirmDialogModal from "@/src/components/ui/Modal/ConfirmDialogModal";
 import FoodList from "@/src/components/FoodList";
+import Footer from "@/src/components/ui/Footer";
 
 const HomePage: React.FC = () => {
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
@@ -50,6 +51,8 @@ const HomePage: React.FC = () => {
         onDelete={onDelete}
         isLoading={isLoadingMeals}
       />
+
+      <Footer />
 
       <Modal
         isOpen={isOpen}

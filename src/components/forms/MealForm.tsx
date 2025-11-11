@@ -28,7 +28,6 @@ const schema = z.object({
     .min(3, { message: "Restaurant name must be at least 3 characters long!" }),
   restaurantLogo: z
     .string()
-    .min(1, { message: "Restaurant logo is required!" })
     .url({ message: "Restaurant logo must be a valid URL!" })
     .refine((url) => url.startsWith("https://"), {
       message: "URL must use HTTPS protocol",
@@ -61,10 +60,10 @@ const MealForm: React.FC<MealFormProps> = ({ onClose, isEdit }) => {
     resolver: zodResolver(schema),
     defaultValues: {
       name: "",
-      foodRating: 0,
+      foodRating: undefined as unknown as number,
       restaurantName: "",
       restaurantLogo: "",
-      restaurantStatus: undefined as unknown as string,
+      restaurantStatus: "",
     },
   });
 
@@ -140,6 +139,7 @@ const MealForm: React.FC<MealFormProps> = ({ onClose, isEdit }) => {
           fieldName="name"
           inputType="text"
           placeholder="Food name"
+          className="bg-food-white-2 text-food-dark-gray-1"
           {...register("name")}
           error={errors.name?.message}
         />
@@ -148,6 +148,7 @@ const MealForm: React.FC<MealFormProps> = ({ onClose, isEdit }) => {
           inputType="number"
           placeholder="Food rating (1-5)"
           step="0.1"
+          className="bg-food-white-2 text-food-dark-gray-1"
           {...register("foodRating", { valueAsNumber: true })}
           error={errors.foodRating?.message}
         />
@@ -155,6 +156,7 @@ const MealForm: React.FC<MealFormProps> = ({ onClose, isEdit }) => {
           fieldName="restaurantName"
           inputType="text"
           placeholder="Restaurant name"
+          className="bg-food-white-2 text-food-dark-gray-1"
           {...register("restaurantName")}
           error={errors.restaurantName?.message}
         />
@@ -162,6 +164,7 @@ const MealForm: React.FC<MealFormProps> = ({ onClose, isEdit }) => {
           fieldName="restaurantLogo"
           inputType="text"
           placeholder="Restaurant logo (link)"
+          className="bg-food-white-2 text-food-dark-gray-1"
           {...register("restaurantLogo")}
           error={errors.restaurantLogo?.message}
         />
@@ -170,7 +173,7 @@ const MealForm: React.FC<MealFormProps> = ({ onClose, isEdit }) => {
           name="restaurantStatus"
           value={watch("restaurantStatus")}
           onChange={(value) =>
-            setValue("restaurantStatus", value as "open" | "closed")
+            setValue("restaurantStatus", value, { shouldValidate: true })
           }
           options={[
             { value: "open", label: "Open" },

@@ -30,7 +30,7 @@ const FoodSearch = () => {
                 className="flex items-center justify-center gap-2 text-food-dark-gray-3 px-4 py-2 
                 rounded-md font-extrabold cursor-text transition-all duration-150 ease-out"
               >
-                <Image src="/basket.svg" alt="Basket" width={16} height={18} />
+                <img src="/basket.svg" alt="Basket" width={16} height={18} />
                 <span>Pickup</span>
               </Button>
             </div>
@@ -40,7 +40,7 @@ const FoodSearch = () => {
                   fieldName="search"
                   inputType="text"
                   placeholder="Search for a meal"
-                  className="h-full"
+                  className="h-full bg-food-white-2"
                   icon={
                     <SearchIcon className="w-5 h-5 text-food-dark-gray-3" />
                   }
