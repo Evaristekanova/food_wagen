@@ -185,10 +185,10 @@ describe("MealForm User Interaction", () => {
   it("should render form with all input fields", () => {
     renderMealForm();
 
-    expect(screen.getByTestId("input-name")).toBeDefined();
-    expect(screen.getByTestId("input-foodRating")).toBeDefined();
-    expect(screen.getByTestId("input-restaurantName")).toBeDefined();
-    expect(screen.getByTestId("input-restaurantLogo")).toBeDefined();
+    expect(screen.getByTestId("input-food-name")).toBeDefined();
+    expect(screen.getByTestId("input-food-rating")).toBeDefined();
+    expect(screen.getByTestId("input-restaurant-logo")).toBeDefined();
+    expect(screen.getByTestId("input-restaurant-avatar")).toBeDefined();
     expect(screen.getByTestId("restaurant-status-select")).toBeDefined();
   });
 
@@ -205,16 +205,13 @@ describe("MealForm User Interaction", () => {
     renderMealForm();
 
     // Fill in the form
-    await user.type(screen.getByTestId("input-name"), "Burger");
-    await user.type(screen.getByTestId("input-foodRating"), "4.5");
-    await user.type(screen.getByTestId("input-restaurantName"), "Burger King");
-    await user.type(
-      screen.getByTestId("input-restaurantLogo"),
-      "https://example.com/logo.png"
-    );
+    await user.type(screen.getByTestId("input-food-name"), "Burger");
+    await user.type(screen.getByTestId("input-food-rating"), "4.5");
+    await user.type(screen.getByTestId("input-restaurant-logo"), "https://example.com/logo.png");
+    await user.type(screen.getByTestId("input-restaurant-avatar"), "https://example.com/avatar.png");
     await user.selectOptions(
       screen.getByTestId("restaurant-status-select"),
-      "Open Now"
+      "true"
     );
 
     // Submit the form
@@ -226,10 +223,10 @@ describe("MealForm User Interaction", () => {
       expect.objectContaining({
         name: "Burger",
         rating: 4.5,
-        restaurantName: "Burger King",
         logo: "https://example.com/logo.png",
+        avatar: "https://example.com/avatar.png",
         open: true,
-        status: "Open Now",
+        status: "true",
       })
     );
   });
@@ -246,7 +243,7 @@ describe("MealForm User Interaction", () => {
     // Wait for validation errors to appear
     await waitFor(
       () => {
-        const errorElement = screen.getByTestId("error-name");
+        const errorElement = screen.getByTestId("error-food-name");
         expect(errorElement).toBeDefined();
       },
       { timeout: 3000 }
@@ -259,12 +256,12 @@ describe("MealForm User Interaction", () => {
     renderMealForm();
 
     // Enter name that's too short
-    await user.type(screen.getByTestId("input-name"), "Ab");
+    await user.type(screen.getByTestId("input-food-name"), "Ab");
     await user.click(screen.getByRole("button", { name: /add/i }));
 
     await waitFor(
       () => {
-        const errorElement = screen.getByTestId("error-name");
+        const errorElement = screen.getByTestId("error-food-name");
         expect(errorElement).toBeDefined();
         expect(errorElement.textContent).toBe(
           "Name must be at least 3 characters long!"
@@ -280,23 +277,20 @@ describe("MealForm User Interaction", () => {
     renderMealForm();
 
     // Enter invalid rating
-    await user.type(screen.getByTestId("input-name"), "Burger");
-    await user.type(screen.getByTestId("input-foodRating"), "6");
-    await user.type(screen.getByTestId("input-restaurantName"), "Burger King");
-    await user.type(
-      screen.getByTestId("input-restaurantLogo"),
-      "https://example.com/logo.png"
-    );
+    await user.type(screen.getByTestId("input-food-name"), "Burger");
+    await user.type(screen.getByTestId("input-food-rating"), "6");
+    await user.type(screen.getByTestId("input-restaurant-logo"), "https://example.com/logo.png");
+    await user.type(screen.getByTestId("input-restaurant-avatar"), "https://example.com/avatar.png");
     await user.selectOptions(
       screen.getByTestId("restaurant-status-select"),
-      "Open Now"
+      "true"
     );
 
     await user.click(screen.getByRole("button", { name: /add/i }));
 
     await waitFor(
       () => {
-        const errorElement = screen.getByTestId("error-foodRating");
+        const errorElement = screen.getByTestId("error-food-rating");
         expect(errorElement).toBeDefined();
         expect(errorElement.textContent).toBe(
           "Food rating must be in the range of 1-5!"
@@ -311,20 +305,20 @@ describe("MealForm User Interaction", () => {
 
     renderMealForm();
 
-    await user.type(screen.getByTestId("input-name"), "Burger");
-    await user.type(screen.getByTestId("input-foodRating"), "4.5");
-    await user.type(screen.getByTestId("input-restaurantName"), "Burger King");
-    await user.type(screen.getByTestId("input-restaurantLogo"), "invalid-url");
+    await user.type(screen.getByTestId("input-food-name"), "Burger");
+    await user.type(screen.getByTestId("input-food-rating"), "4.5");
+    await user.type(screen.getByTestId("input-restaurant-logo"), "invalid-url");
+    await user.type(screen.getByTestId("input-restaurant-avatar"), "https://example.com/avatar.png");
     await user.selectOptions(
       screen.getByTestId("restaurant-status-select"),
-      "Open Now"
+      "true"
     );
 
     await user.click(screen.getByRole("button", { name: /add/i }));
 
     await waitFor(
       () => {
-        expect(screen.getByTestId("error-restaurantLogo")).toBeDefined();
+        expect(screen.getByTestId("error-restaurant-logo")).toBeDefined();
       },
       { timeout: 3000 }
     );
@@ -356,21 +350,21 @@ describe("MealForm User Interaction", () => {
     await waitFor(
       () => {
         expect(
-          (screen.getByTestId("input-name") as HTMLInputElement).value
+          (screen.getByTestId("input-food-name") as HTMLInputElement).value
         ).toBe("Pizza");
         expect(
-          (screen.getByTestId("input-foodRating") as HTMLInputElement).value
+          (screen.getByTestId("input-food-rating") as HTMLInputElement).value
         ).toBe("4.5");
         expect(
-          (screen.getByTestId("input-restaurantName") as HTMLInputElement).value
-        ).toBe("Pizza Place");
-        expect(
-          (screen.getByTestId("input-restaurantLogo") as HTMLInputElement).value
+          (screen.getByTestId("input-restaurant-logo") as HTMLInputElement).value
         ).toBe("https://example.com/logo.png");
+        expect(
+          (screen.getByTestId("input-restaurant-avatar") as HTMLInputElement).value
+        ).toBe("");
         expect(
           (screen.getByTestId("restaurant-status-select") as HTMLSelectElement)
             .value
-        ).toBe("Open Now");
+        ).toBe("true");
       },
       { timeout: 3000 }
     );
@@ -389,7 +383,7 @@ describe("MealForm User Interaction", () => {
       status: "Open",
       Price: "15.99",
       createdAt: "2024-01-01T00:00:00Z",
-      avatar: "",
+      avatar: "https://example.com/avatar.png",
       image: "",
     };
 
@@ -411,39 +405,48 @@ describe("MealForm User Interaction", () => {
     await waitFor(
       () => {
         expect(
-          (screen.getByTestId("input-name") as HTMLInputElement).value
+          (screen.getByTestId("input-food-name") as HTMLInputElement).value
         ).toBe("Pizza");
         expect(
-          (screen.getByTestId("input-foodRating") as HTMLInputElement).value
+          (screen.getByTestId("input-food-rating") as HTMLInputElement).value
         ).toBe("4.5");
         expect(
-          (screen.getByTestId("input-restaurantName") as HTMLInputElement).value
-        ).toBe("Pizza Place");
-        expect(
-          (screen.getByTestId("input-restaurantLogo") as HTMLInputElement).value
+          (screen.getByTestId("input-restaurant-logo") as HTMLInputElement).value
         ).toBe("https://example.com/logo.png");
+        expect(
+          (screen.getByTestId("input-restaurant-avatar") as HTMLInputElement).value
+        ).toBe("https://example.com/avatar.png");
         expect(
           (screen.getByTestId("restaurant-status-select") as HTMLSelectElement)
             .value
-        ).toBe("Open Now");
+        ).toBe("true");
       },
       { timeout: 3000 }
     );
 
     // Change the name
-    await user.clear(screen.getByTestId("input-name"));
-    await user.type(screen.getByTestId("input-name"), "Updated Pizza");
+    await user.clear(screen.getByTestId("input-food-name"));
+    await user.type(screen.getByTestId("input-food-name"), "Updated Pizza");
 
     // Submit
     const submitButton = screen.getByRole("button", { name: /save/i });
     await user.click(submitButton);
 
-    // Verify updateMeal was called - no need to wait
-    expect(mockUpdateMeal).toHaveBeenCalledWith(
-      expect.objectContaining({
-        id: "1",
-        name: "Updated Pizza",
-      })
+    // Verify updateMeal was called - wait for form submission
+    await waitFor(
+      () => {
+        expect(mockUpdateMeal).toHaveBeenCalledWith(
+          expect.objectContaining({
+            name: "Updated Pizza",
+            rating: 4.5,
+            logo: "https://example.com/logo.png",
+            avatar: "https://example.com/avatar.png",
+            open: true,
+            status: "true",
+          })
+        );
+      },
+      { timeout: 3000 }
     );
   });
 });

@@ -116,6 +116,7 @@ const MealForm: React.FC<MealFormProps> = ({ onClose, isEdit }) => {
   ]);
 
   const onSubmit = (data: Schema) => {
+    const openValue = data.status === "true";
     if (isEdit) {
       updateMeal({
         id: isEdit,
@@ -123,7 +124,7 @@ const MealForm: React.FC<MealFormProps> = ({ onClose, isEdit }) => {
         rating: data.rating,
         logo: data.logo,
         avatar: data.avatar,
-        open: data.open,
+        open: openValue,
         status: data.status,
         createdAt: new Date().toISOString(),
       } as unknown as Meal);
@@ -133,7 +134,7 @@ const MealForm: React.FC<MealFormProps> = ({ onClose, isEdit }) => {
         rating: data.rating,
         logo: data.logo,
         avatar: data.avatar,
-        open: data.open,
+        open: openValue,
         status: data.status,
         createdAt: new Date().toISOString(),
       } as unknown as Meal);

@@ -57,8 +57,8 @@ describe("FoodCard Component Rendering", () => {
       <FoodCard meal={mockMeal} onEdit={mockOnEdit} onDelete={mockOnDelete} />
     );
 
-    // Verify food name is displayed (restaurant name is shown, not meal name directly in this component)
-    expect(screen.getByText("Italian Bistro")).toBeDefined();
+    // Verify food name is displayed (meal name is shown, not restaurant name)
+    expect(screen.getByText("Pizza Margherita")).toBeDefined();
 
     // Verify price is displayed
     expect(screen.getByText("$15.99")).toBeDefined();
@@ -81,12 +81,14 @@ describe("FoodCard Component Rendering", () => {
       />
     );
 
-    expect(screen.getByText("Burger King")).toBeDefined();
+    // FoodCard displays meal name, not restaurant name
+    expect(screen.getByText("Pizza Margherita")).toBeDefined();
   });
 
   it("should render restaurant name correctly when restaurantName is an object", () => {
     const mealWithObjectName: Meal = {
       ...mockMeal,
+      name: "McDonald's Burger",
       restaurantName: {
         name: "McDonald's",
         logo: "https://example.com/mcd.png",
@@ -102,7 +104,8 @@ describe("FoodCard Component Rendering", () => {
       />
     );
 
-    expect(screen.getByText("McDonald's")).toBeDefined();
+    // FoodCard displays the meal name, not the restaurant name
+    expect(screen.getByText("McDonald's Burger")).toBeDefined();
   });
 
   it('should display "Open Now" status when restaurant is open', () => {

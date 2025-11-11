@@ -39,7 +39,10 @@ const ConfirmDialogModal: React.FC<ConfirmDialogModalProps> = ({
         <div className="px-4 flex justify-center rounded-2 gap-6 items-center w-full mt-4">
           <Button
             className="bg-food-yellow-1 text-white px-4 py-3 rounded-md font-bold cursor-pointer  w-[170px]"
-            onClick={onConfirm}
+            onClick={() => {
+              onConfirm();
+              onClose();
+            }}
             isLoading={isLoading}
             disabled={isLoading}
           >

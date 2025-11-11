@@ -65,7 +65,7 @@ const HomePage: React.FC = () => {
         isOpen={isOpen}
         onClose={closeModal}
         title={isEdit ? "Edit a meal" : "Add meal"}
-        className="max-w-[800px] py-10! pb-7!"
+        className="max-w-[800px] sm:py-10! sm:pb-7!"
         modalBlurClassName="bg-food-dark-gray-1/50"
       >
         <MealForm

@@ -45,7 +45,7 @@ const FoodSearch: React.FC<FoodSearchProps> = ({
   return (
     <form
       onSubmit={handleSearch}
-      className="flex flex-col sm:flex-row gap-3 sm:gap-4 md:gap-16 items-stretch sm:items-center w-full border-food-dark-gray-3 rounded-lg p-3 sm:p-4"
+      className="flex flex-col sm:flex-row gap-3 sm:gap-4 md:gap-6 lg:gap-16 items-stretch sm:items-center w-full border-food-dark-gray-3 rounded-lg p-3 sm:p-4"
     >
       <div className="w-full h-[48px] sm:h-[52px]">
         <Input

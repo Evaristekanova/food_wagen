@@ -158,7 +158,7 @@ describe('useMeal API Mocking Tests', () => {
       // Verify error state
       expect(result.current.errorMeals).toBeDefined();
       expect(result.current.errorMeals?.message).toBe(errorMessage);
-      expect(result.current.mealsData).toBeUndefined();
+      expect(result.current.mealsData).toEqual([]);
 
       // Verify the API was called
       expect(mealService.getMeals).toHaveBeenCalledTimes(1);
@@ -207,7 +207,7 @@ describe('useMeal API Mocking Tests', () => {
       // Verify error is handled
       expect(result.current.errorMeals).toBeDefined();
       expect(result.current.errorMeals?.name).toBe('TimeoutError');
-      expect(result.current.mealsData).toBeUndefined();
+      expect(result.current.mealsData).toEqual([]);
     });
   });
 
