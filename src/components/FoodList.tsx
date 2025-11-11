@@ -1,14 +1,19 @@
 import React from "react";
-import FoodCard from "../FoodCard";
+import FoodCard from "./ui/FoodCard";
 import { Meal } from "@/src/types/meal";
-import Loader from "./Loader";
+import Loader from "./ui/Loader";
 interface FoodListProps {
   meals: Meal[];
   onEdit: (id: string) => void;
   onDelete: (id: string) => void;
   isLoading: boolean;
 }
-const FoodList = ({ meals, onEdit, onDelete, isLoading }: FoodListProps) => {
+const FoodList: React.FC<FoodListProps> = ({
+  meals,
+  onEdit,
+  onDelete,
+  isLoading,
+}) => {
   if (isLoading) {
     return (
       <section className="py-14 px-20">

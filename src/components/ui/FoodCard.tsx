@@ -2,7 +2,7 @@ import { Meal } from "@/src/types/meal";
 import { Tag } from "lucide-react";
 import Image from "next/image";
 import React from "react";
-import { MealMenu } from "./ui/MealMenu";
+import { MealMenu } from "./MealMenu";
 
 interface FoodCardProps {
   meal: Meal;
@@ -51,7 +51,7 @@ const FoodCard: React.FC<FoodCardProps> = ({ meal, onEdit, onDelete }) => {
               <p className="text-lg text-food-dark-gray-1 font-bold">
                 {typeof restaurantName === "string"
                   ? restaurantName
-                  : restaurantName.name}
+                  : restaurantName?.name || ""}
               </p>
               <div className="flex items-center gap-1">
                 <Image src="/star.svg" alt="Star" width={20} height={20} />

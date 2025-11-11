@@ -6,8 +6,8 @@ import MealForm from "@/src/components/forms/MealForm";
 import Navbar from "@/src/components/ui/Navbar";
 import FoodSearch from "@/src/components/FoodSearch";
 import { useDeleteMealById, useMeal } from "@/src/hooks/useMeal/useMeal";
-import ConfirmDialogModal from "../components/ui/Modal/ConfirmDialogModal";
-import FoodList from "../components/ui/FoodList";
+import ConfirmDialogModal from "@/src/components/ui/Modal/ConfirmDialogModal";
+import FoodList from "@/src/components/FoodList";
 
 const HomePage: React.FC = () => {
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
