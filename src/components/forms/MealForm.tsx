@@ -115,11 +115,11 @@ const MealForm: React.FC<MealFormProps> = ({ onClose, isEdit }) => {
         rating: data.foodRating,
         restaurantName: data.restaurantName,
         logo: data.restaurantLogo,
-        open: data.restaurantStatus === "Open Now".toLowerCase(),
-        status:
-          data.restaurantStatus === "Open Now".toLowerCase()
-            ? "Open Now"
-            : "Closed",
+      open: data.restaurantStatus === "Open Now",
+      status:
+        data.restaurantStatus === "Open Now"
+          ? "Open Now"
+          : "Closed",
       } as Meal);
     } else {
       createMeal({
@@ -127,11 +127,11 @@ const MealForm: React.FC<MealFormProps> = ({ onClose, isEdit }) => {
         rating: data.foodRating,
         restaurantName: data.restaurantName,
         logo: data.restaurantLogo,
-        open: data.restaurantStatus === "Open Now".toLowerCase(),
-        status:
-          data.restaurantStatus === "Open Now".toLowerCase()
-            ? "Open Now"
-            : "Closed",
+      open: data.restaurantStatus === "Open Now",
+      status:
+        data.restaurantStatus === "Open Now"
+          ? "Open Now"
+          : "Closed",
         createdAt: new Date().toISOString(),
       } as Meal);
     }
