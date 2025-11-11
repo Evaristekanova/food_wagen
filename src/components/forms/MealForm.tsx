@@ -203,7 +203,7 @@ const MealForm: React.FC<MealFormProps> = ({ onClose, isEdit }) => {
           ]}
           error={errors.status?.message}
         />
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-4 mt-6">
           <Button
             className="bg-food-yellow-1 text-white px-4 py-3 rounded-md font-bold cursor-pointer"
             type="submit"

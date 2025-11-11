@@ -70,7 +70,7 @@ export const Modal: React.FC<ModalProps> = ({
 
   return (
     <div
-      className={`fixed inset-0 z-30 flex items-start justify-center p-2 md:p-14 bg-gray-400/50 dark:bg-black/50 backdrop-blur-[5px] overflow-y-auto transition-all duration-500 ease-in-out ${
+      className={`fixed inset-0 z-30 flex items-start justify-center p-2 md:p-14 bg-gray-200/70 dark:bg-gray-800/70 backdrop-blur-[5px] overflow-y-auto transition-all duration-500 ease-in-out ${
         isVisible ? "opacity-100" : "opacity-0"
       } ${modalBlurClassName}`}
     >
