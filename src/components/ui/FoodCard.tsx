@@ -73,7 +73,7 @@ const FoodCard: React.FC<FoodCardProps> = ({ meal, onEdit, onDelete }) => {
                 : "bg-food-orange-1/40 opacity-100 text-food-orange-1"
             }`}
           >
-            {open ? "Open" : "Closed"}
+            {open ? "Open Now" : "Closed"}
           </div>
         </div>
       </div>

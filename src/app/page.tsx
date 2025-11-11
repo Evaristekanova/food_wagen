@@ -58,7 +58,7 @@ const HomePage: React.FC = () => {
       <Modal
         isOpen={isOpen}
         onClose={closeModal}
-        title="Add a meal"
+        title={isEdit ? "Edit a meal" : "Add meal"}
         className="max-w-[800px] "
         modalBlurClassName="bg-food-dark-gray-1/50"
       >

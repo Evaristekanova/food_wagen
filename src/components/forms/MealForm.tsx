@@ -34,7 +34,7 @@ const schema = z.object({
     }),
   restaurantStatus: z
     .string()
-    .refine((val) => val === "open" || val === "closed", {
+    .refine((val) => val === "Open Now" || val === "Closed", {
       message: "Please select a restaurant status!",
     }),
 });
@@ -87,7 +87,7 @@ const MealForm: React.FC<MealFormProps> = ({ onClose, isEdit }) => {
           : mealByIdData?.restaurantName?.name) || ""
       );
       setValue("restaurantLogo", mealByIdData?.logo || "");
-      setValue("restaurantStatus", mealByIdData?.open ? "open" : "closed");
+      setValue("restaurantStatus", mealByIdData?.open ? "Open Now" : "Closed");
     }
   }, [isEdit, mealByIdData, setValue]);
 
@@ -115,7 +115,11 @@ const MealForm: React.FC<MealFormProps> = ({ onClose, isEdit }) => {
         rating: data.foodRating,
         restaurantName: data.restaurantName,
         logo: data.restaurantLogo,
-        open: data.restaurantStatus === "open",
+        open: data.restaurantStatus === "Open Now".toLowerCase(),
+        status:
+          data.restaurantStatus === "Open Now".toLowerCase()
+            ? "Open Now"
+            : "Closed",
       } as Meal);
     } else {
       createMeal({
@@ -123,7 +127,12 @@ const MealForm: React.FC<MealFormProps> = ({ onClose, isEdit }) => {
         rating: data.foodRating,
         restaurantName: data.restaurantName,
         logo: data.restaurantLogo,
-        open: data.restaurantStatus === "open",
+        open: data.restaurantStatus === "Open Now".toLowerCase(),
+        status:
+          data.restaurantStatus === "Open Now".toLowerCase()
+            ? "Open Now"
+            : "Closed",
+        createdAt: new Date().toISOString(),
       } as Meal);
     }
   };
@@ -169,14 +178,14 @@ const MealForm: React.FC<MealFormProps> = ({ onClose, isEdit }) => {
           error={errors.restaurantLogo?.message}
         />
         <DropdownField
-          label="Restaurant status"
+          label="Food Category"
           value={watch("restaurantStatus")}
           onChange={(value) =>
             setValue("restaurantStatus", value, { shouldValidate: true })
           }
           options={[
-            { value: "open", label: "Open" },
-            { value: "closed", label: "Closed" },
+            { value: "Open Now", label: "Open Now" },
+            { value: "Closed", label: "Closed" },
           ]}
           error={errors.restaurantStatus?.message}
         />
@@ -186,6 +195,7 @@ const MealForm: React.FC<MealFormProps> = ({ onClose, isEdit }) => {
             type="submit"
             isLoading={isLoadingCreateMeal || isLoadingUpdateMeal}
             disabled={isLoadingCreateMeal || isLoadingUpdateMeal}
+            loadingText={isEdit ? "Updating Food..." : "Adding Food..."}
           >
             {isEdit ? "Save" : "Add"}
           </Button>

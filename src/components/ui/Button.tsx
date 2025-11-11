@@ -8,6 +8,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   disabled?: boolean;
   onClick?: () => void;
   children: React.ReactNode;
+  loadingText?: string;
 }
 
 export const Button: React.FC<ButtonProps> = ({
@@ -15,6 +16,7 @@ export const Button: React.FC<ButtonProps> = ({
   isLoading = false,
   className = "",
   disabled,
+  loadingText = "processing...",
   ...props
 }) => {
   return (
@@ -28,7 +30,7 @@ export const Button: React.FC<ButtonProps> = ({
       {isLoading ? (
         <div className="flex items-center justify-center text-food-white">
           <Loader2 className="animate-spin ml-1 mr-2 h-5 w-5" />
-          <span className=" text-lg">processing...</span>
+          <span className=" text-lg">{loadingText}</span>
         </div>
       ) : (
         children
