@@ -39,7 +39,7 @@ const HomePage: React.FC = () => {
         closeModal(["meals"]);
       }, 0);
     }
-  }, [isSuccessDeleteMealById, setIsEdit, setIsConfirmDialogOpen]);
+  }, [isSuccessDeleteMealById, setIsEdit, setIsConfirmDialogOpen, closeModal]);
 
   return (
     <div className=" min-h-screen flex-col gap-4">
