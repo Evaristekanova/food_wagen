@@ -32,7 +32,7 @@ const FoodList: React.FC<FoodListProps> = ({
 
   return (
     <section className="py-14 px-20">
-      <h1 className="text-4xl font-bold text-food-dark-gray-1 text-center">
+      <h1 className="text-4xl font-bold text-food-dark-gray-1 text-center mb-10">
         Featured Meals
       </h1>
       {hasNoResults ? (

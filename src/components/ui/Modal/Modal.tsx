@@ -10,6 +10,7 @@ interface ModalProps {
   showCloseButton?: boolean;
   isFullscreen?: boolean;
   modalBlurClassName?: string;
+  preventClose?: boolean;
 }
 
 export const Modal: React.FC<ModalProps> = ({
@@ -19,6 +20,7 @@ export const Modal: React.FC<ModalProps> = ({
   className,
   title,
   modalBlurClassName,
+  preventClose = false,
 }) => {
   const modalRef = useRef<HTMLDivElement>(null);
 
@@ -38,7 +40,7 @@ export const Modal: React.FC<ModalProps> = ({
 
   useEffect(() => {
     const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
+      if (event.key === "Escape" && !preventClose) {
         onClose();
       }
     };
@@ -50,7 +52,7 @@ export const Modal: React.FC<ModalProps> = ({
     return () => {
       document.removeEventListener("keydown", handleEscape);
     };
-  }, [isOpen, onClose]);
+  }, [isOpen, onClose, preventClose]);
 
   useEffect(() => {
     if (isOpen) {

@@ -13,7 +13,7 @@ const Header = ({
 }) => {
   return (
     <header>
-      <div className=" bg-food-yellow-1 flex items-center justify-center max-h-[330px] overflow-hidden">
+      <div className=" bg-food-yellow-1 flex items-center justify-center max-h-[380px] overflow-hidden">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-28 p-20 relative z-10 overflow-hidden">
           <div className="col-span-2">
             <div className="flex flex-col gap-1 pt-3">

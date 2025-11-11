@@ -31,6 +31,7 @@ const ConfirmDialogModal: React.FC<ConfirmDialogModalProps> = ({
         onClose={onClose}
         title={title}
         className="max-w-[700px] pt-7! pb-4!"
+        preventClose={isLoading}
       >
         <div className="py-3">
           <p className=" text-food-dark-gray-1 text-center">{message}</p>
@@ -38,12 +39,7 @@ const ConfirmDialogModal: React.FC<ConfirmDialogModalProps> = ({
         <div className="px-4 flex justify-center rounded-2 gap-6 items-center w-full mt-4">
           <Button
             className="bg-food-yellow-1 text-white px-4 py-3 rounded-md font-bold cursor-pointer  w-[170px]"
-            onClick={() => {
-              onConfirm();
-              if (!isLoading) {
-                onClose();
-              }
-            }}
+            onClick={onConfirm}
             isLoading={isLoading}
             disabled={isLoading}
           >
@@ -52,6 +48,7 @@ const ConfirmDialogModal: React.FC<ConfirmDialogModalProps> = ({
           <Button
             className="border-2 border-food-yellow-1 text-black px-4 py-3 rounded-md font-bold cursor-pointer w-[170px]"
             onClick={onClose}
+            disabled={isLoading}
           >
             {cancelButtonText}
           </Button>

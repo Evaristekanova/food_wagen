@@ -9,8 +9,10 @@ import ConfirmDialogModal from "@/src/components/ui/Modal/ConfirmDialogModal";
 import FoodList from "@/src/components/FoodList";
 import Footer from "@/src/components/ui/Footer";
 import Header from "@/src/components/Header";
+import { useQueryClient } from "@tanstack/react-query";
 
 const HomePage: React.FC = () => {
+  const queryClient = useQueryClient();
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const { isOpen, openModal, closeModal, setIsEdit, isEdit } = useModal();
@@ -34,13 +36,15 @@ const HomePage: React.FC = () => {
 
   useEffect(() => {
     if (isSuccessDeleteMealById) {
+      // Close dialog after successful delete
+      queryClient.invalidateQueries({ queryKey: ["meals"] });
+      // Use setTimeout to avoid cascading renders
       setTimeout(() => {
         setIsEdit(undefined);
         setIsConfirmDialogOpen(false);
       }, 0);
-      closeModal(["meals"]);
     }
-  }, [isSuccessDeleteMealById, setIsEdit, setIsConfirmDialogOpen, closeModal]);
+  }, [isSuccessDeleteMealById, setIsEdit, queryClient]);
 
   return (
     <div className=" min-h-screen flex-col gap-4">
@@ -75,7 +79,7 @@ const HomePage: React.FC = () => {
         onConfirm={() => deleteMealById(isEdit || "")}
         title="Delete meal"
         message="Are you sure you want to delete this meal?"
-        confirmButtonText="Delete"
+        confirmButtonText={isLoadingDeleteMealById ? "Deleting..." : "Delete"}
         cancelButtonText="Cancel"
         isLoading={isLoadingDeleteMealById}
       />
