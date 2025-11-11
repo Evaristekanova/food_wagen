@@ -27,12 +27,14 @@ const FoodCard: React.FC<FoodCardProps> = ({ meal, onEdit, onDelete }) => {
   return (
     <div className="bg-food-white rounded-lg p-4 w-full ">
       <div className="w-full h-[195px] relative overflow-hidden rounded-3xl">
-        <img
+        <Image
           src={`${image || avatar}`}
           alt={name}
           width={400}
-          height={400}
+          height={195}
           className="w-full h-full object-cover"
+          loading="lazy"
+          unoptimized
         />
         <div className="absolute  left-5 top-5 from-food-dark-gray-1/50 to-transparent bg-food-orange-1 px-4 py-2 rounded-lg flex items-center gap-2">
           <Tag className="w-7 h-7 text-food-white" />
@@ -42,10 +44,14 @@ const FoodCard: React.FC<FoodCardProps> = ({ meal, onEdit, onDelete }) => {
       <div className="flex flex-col gap-2 py-4">
         <div className="flex  gap-2 justify-between">
           <div className="flex items-center gap-6">
-            <img
+            <Image
               src={`${logo}`}
               alt={name}
+              width={48}
+              height={48}
               className="rounded-lg object-cover w-12 h-12 shadow-md shrink-0"
+              loading="lazy"
+              unoptimized
             />
             <div className="flex flex-col gap-1">
               <p className="text-lg text-food-dark-gray-1 font-bold">{name}</p>

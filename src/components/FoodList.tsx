@@ -1,10 +1,9 @@
 "use client";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import FoodCard from "./ui/FoodCard";
 import { Meal } from "@/src/types/meal";
 import Loader from "./ui/Loader";
-import { ChevronRight, SearchX } from "lucide-react";
-import { Button } from "./ui/Button";
+import { SearchX } from "lucide-react";
 
 interface FoodListProps {
   meals: Meal[];
@@ -26,6 +25,7 @@ const FoodList: React.FC<FoodListProps> = ({
   const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
   const prevMealsLengthRef = useRef(meals.length);
   const prevSearchQueryRef = useRef(searchQuery);
+  const observerTarget = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const mealsLengthChanged = prevMealsLengthRef.current !== meals.length;
@@ -42,9 +42,38 @@ const FoodList: React.FC<FoodListProps> = ({
     }
   }, [meals.length, searchQuery]);
 
-  const handleLoadMore = () => {
-    setVisibleCount((prev) => prev + ITEMS_PER_PAGE);
-  };
+  const handleLoadMore = useCallback(() => {
+    setVisibleCount((prev) => {
+      const newCount = prev + ITEMS_PER_PAGE;
+      return Math.min(newCount, meals.length);
+    });
+  }, [meals.length]);
+
+  // Intersection Observer for infinite scroll
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && meals.length > visibleCount) {
+          handleLoadMore();
+        }
+      },
+      {
+        rootMargin: "100px", // Start loading 100px before the element is visible
+        threshold: 0.1,
+      }
+    );
+
+    const currentTarget = observerTarget.current;
+    if (currentTarget && meals.length > visibleCount) {
+      observer.observe(currentTarget);
+    }
+
+    return () => {
+      if (currentTarget) {
+        observer.unobserve(currentTarget);
+      }
+    };
+  }, [visibleCount, meals.length, handleLoadMore]);
 
   if (isLoading) {
     return (
@@ -100,15 +129,11 @@ const FoodList: React.FC<FoodListProps> = ({
             ))}
           </div>
           {hasMoreItems && (
-            <div className="flex justify-center mt-8 sm:mt-10">
-              <Button
-                className="bg-food-yellow-1 text-white px-3 sm:px-4 py-3 rounded-md font-bold cursor-pointer hover:bg-food-yellow-2 transition-all flex items-center justify-center gap-1
-                 duration-150 ease-out shadow-xl shadow-food-yellow-1/50 hover:bg-food-yellow-1/80 text-xs sm:text-sm md:text-base whitespace-nowrap"
-                onClick={handleLoadMore}
-              >
-                <span>Load More</span>
-                <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
-              </Button>
+            <div
+              ref={observerTarget}
+              className="flex justify-center mt-8 sm:mt-10 py-4"
+            >
+              <Loader />
             </div>
           )}
         </>

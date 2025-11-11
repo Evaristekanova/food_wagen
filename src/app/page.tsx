@@ -1,15 +1,34 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { Modal } from "@/src/components/ui/Modal/Modal";
+import dynamic from "next/dynamic";
 import { useModal } from "../hooks/useModal";
-import MealForm from "@/src/components/forms/MealForm";
 import Navbar from "@/src/components/ui/Navbar";
 import { useDeleteMealById, useMeal } from "@/src/hooks/useMeal/useMeal";
-import ConfirmDialogModal from "@/src/components/ui/Modal/ConfirmDialogModal";
 import FoodList from "@/src/components/FoodList";
 import Footer from "@/src/components/ui/Footer";
 import Header from "@/src/components/Header";
 import { useQueryClient } from "@tanstack/react-query";
+
+// Lazy load modals and forms - only load when needed
+const Modal = dynamic(
+  () =>
+    import("@/src/components/ui/Modal/Modal").then((mod) => ({
+      default: mod.Modal,
+    })),
+  {
+    ssr: false,
+    loading: () => null, // Don't show loading state for modals
+  }
+);
+const MealForm = dynamic(() => import("@/src/components/forms/MealForm"), {
+  ssr: false,
+});
+const ConfirmDialogModal = dynamic(
+  () => import("@/src/components/ui/Modal/ConfirmDialogModal"),
+  {
+    ssr: false,
+  }
+);
 
 const HomePage: React.FC = () => {
   const queryClient = useQueryClient();
