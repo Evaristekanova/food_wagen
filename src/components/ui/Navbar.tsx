@@ -9,7 +9,7 @@ interface NavbarProps {
 const Navbar = ({ onAddMeal }: NavbarProps) => {
   return (
     <nav className="flex items-center justify-between py-3 sm:py-4 px-4 sm:px-8 md:px-20 lg:px-22 bg-food-white w-full rounded-md">
-      <Link href="/" className="flex-shrink-0">
+      <Link href="/" className="shrink-0">
         <Image
           src="/logo.svg"
           alt="FoodWagen"

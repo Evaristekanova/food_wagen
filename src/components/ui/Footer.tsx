@@ -1,5 +1,5 @@
 import { FooterLink, footerLinks } from "@/src/constants/footerLinks.constants";
-import { Facebook, Instagram, Mail, Twitter } from "lucide-react";
+import { Facebook, Heart, Instagram, Mail, Twitter } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 import { Input } from "./CustomInput";
@@ -84,7 +84,9 @@ const Footer: React.FC = () => {
         </p>
         <div className="flex items-center justify-center sm:justify-end">
           <p className="text-xs sm:text-sm text-center sm:text-right">
-            Made with  by <span className="font-bold">Themewagon</span>
+            Made with{" "}
+            <Heart className="w-4 h-4 sm:w-5  text-food-yellow-1 inline-block" />{" "}
+            by <span className="font-bold">Themewagon</span>
           </p>
         </div>
       </div>

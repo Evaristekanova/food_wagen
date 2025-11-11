@@ -48,11 +48,7 @@ const FoodCard: React.FC<FoodCardProps> = ({ meal, onEdit, onDelete }) => {
               className="rounded-lg object-cover w-12 h-12 shadow-md shrink-0"
             />
             <div className="flex flex-col gap-1">
-              <p className="text-lg text-food-dark-gray-1 font-bold">
-                {typeof restaurantName === "string"
-                  ? restaurantName
-                  : restaurantName?.name || ""}
-              </p>
+              <p className="text-lg text-food-dark-gray-1 font-bold">{name}</p>
               <div className="flex items-center gap-1">
                 <Image src="/star.svg" alt="Star" width={20} height={20} />
                 <p className="text-xl text-food-yellow-1 font-light">

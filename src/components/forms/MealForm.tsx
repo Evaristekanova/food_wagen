@@ -19,24 +19,34 @@ const schema = z.object({
   name: z
     .string()
     .min(3, { message: "Name must be at least 3 characters long!" }),
-  foodRating: z
+  rating: z
     .number()
     .min(1, { message: "Food rating must be in the range of 1-5!" })
     .max(5, { message: "Food rating must be in the range of 1-5!" }),
-  restaurantName: z
-    .string()
-    .min(3, { message: "Restaurant name must be at least 3 characters long!" }),
-  restaurantLogo: z
+  // restaurantName: z
+  //   .string()
+  //   .min(3, { message: "Restaurant name must be at least 3 characters long!" }),
+  logo: z
     .string()
     .url({ message: "Restaurant logo must be a valid URL!" })
     .refine((url) => url.startsWith("https://"), {
-      message: "URL must use HTTPS protocol",
+      message: "Restaurant logo must be a valid URL!",
     }),
-  restaurantStatus: z
+  avatar: z
     .string()
-    .refine((val) => val === "Open Now" || val === "Closed", {
-      message: "Please select a restaurant status!",
+    .url({ message: "Restaurant avatar must be a valid URL!" })
+    .refine((url) => url.startsWith("https://"), {
+      message: "Restaurant avatar must be a valid URL!",
     }),
+  open: z.boolean(),
+  status: z.string().refine((val) => val === "true" || val === "false", {
+    message: "Please select a restaurant status!",
+  }),
+  // restaurantStatus: z
+  //   .string()
+  //   .refine((val) => val === "Open Now" || val === "Closed", {
+  //     message: "Please select a restaurant status!",
+  //   }),
 });
 
 type Schema = z.infer<typeof schema>;
@@ -60,10 +70,11 @@ const MealForm: React.FC<MealFormProps> = ({ onClose, isEdit }) => {
     resolver: zodResolver(schema),
     defaultValues: {
       name: "",
-      foodRating: undefined as unknown as number,
-      restaurantName: "",
-      restaurantLogo: "",
-      restaurantStatus: "",
+      rating: undefined as unknown as number,
+      logo: "",
+      avatar: "",
+      open: false,
+      status: "",
     },
   });
 
@@ -79,15 +90,12 @@ const MealForm: React.FC<MealFormProps> = ({ onClose, isEdit }) => {
   useEffect(() => {
     if (isEdit && mealByIdData) {
       setValue("name", mealByIdData?.name || "");
-      setValue("foodRating", mealByIdData?.rating || 0);
-      setValue(
-        "restaurantName",
-        (typeof mealByIdData?.restaurantName === "string"
-          ? mealByIdData?.restaurantName
-          : mealByIdData?.restaurantName?.name) || ""
-      );
-      setValue("restaurantLogo", mealByIdData?.logo || "");
-      setValue("restaurantStatus", mealByIdData?.open ? "Open Now" : "Closed");
+      setValue("rating", mealByIdData?.rating || 0);
+      setValue("logo", mealByIdData?.logo || "");
+      setValue("avatar", mealByIdData?.avatar || "");
+      setValue("open", mealByIdData?.open || false);
+      setValue("status", mealByIdData?.open ? "true" : "false");
+      setValue("rating", mealByIdData?.rating || 0);
     }
   }, [isEdit, mealByIdData, setValue]);
 
@@ -112,28 +120,23 @@ const MealForm: React.FC<MealFormProps> = ({ onClose, isEdit }) => {
       updateMeal({
         id: isEdit,
         name: data.name,
-        rating: data.foodRating,
-        restaurantName: data.restaurantName,
-        logo: data.restaurantLogo,
-      open: data.restaurantStatus === "Open Now",
-      status:
-        data.restaurantStatus === "Open Now"
-          ? "Open Now"
-          : "Closed",
-      } as Meal);
+        rating: data.rating,
+        logo: data.logo,
+        avatar: data.avatar,
+        open: data.open,
+        status: data.status,
+        createdAt: new Date().toISOString(),
+      } as unknown as Meal);
     } else {
       createMeal({
         name: data.name,
-        rating: data.foodRating,
-        restaurantName: data.restaurantName,
-        logo: data.restaurantLogo,
-      open: data.restaurantStatus === "Open Now",
-      status:
-        data.restaurantStatus === "Open Now"
-          ? "Open Now"
-          : "Closed",
+        rating: data.rating,
+        logo: data.logo,
+        avatar: data.avatar,
+        open: data.open,
+        status: data.status,
         createdAt: new Date().toISOString(),
-      } as Meal);
+      } as unknown as Meal);
     }
   };
 
@@ -145,49 +148,60 @@ const MealForm: React.FC<MealFormProps> = ({ onClose, isEdit }) => {
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="grid grid-cols-1 gap-4 px-10">
         <Input
-          fieldName="name"
+          fieldName="food-name"
           inputType="text"
-          placeholder="Food name"
+          placeholder="Enter Food Name"
           className="bg-food-white-2 text-food-dark-gray-1"
           {...register("name")}
           error={errors.name?.message}
         />
         <Input
-          fieldName="foodRating"
+          fieldName="food-rating"
           inputType="number"
-          placeholder="Food rating (1-5)"
+          placeholder="Enter Food Rating (1-5)"
           step="0.1"
           className="bg-food-white-2 text-food-dark-gray-1"
-          {...register("foodRating", { valueAsNumber: true })}
-          error={errors.foodRating?.message}
+          {...register("rating", { valueAsNumber: true })}
+          error={errors.rating?.message}
         />
         <Input
-          fieldName="restaurantName"
+          fieldName="restaurant-logo"
           inputType="text"
-          placeholder="Restaurant name"
+          placeholder="Enter Restaurant Logo (link)"
           className="bg-food-white-2 text-food-dark-gray-1"
-          {...register("restaurantName")}
-          error={errors.restaurantName?.message}
+          {...register("logo")}
+          error={errors.logo?.message}
         />
         <Input
-          fieldName="restaurantLogo"
+          fieldName="restaurant-avatar"
           inputType="text"
-          placeholder="Restaurant logo (link)"
+          placeholder="Enter Restaurant Avatar (link)"
           className="bg-food-white-2 text-food-dark-gray-1"
-          {...register("restaurantLogo")}
-          error={errors.restaurantLogo?.message}
+          {...register("avatar")}
+          error={errors.avatar?.message}
         />
         <DropdownField
-          label="Food Category"
-          value={watch("restaurantStatus")}
+          label="Restaurant Status(Open Now/Closed)"
+          value={watch("status")}
           onChange={(value) =>
-            setValue("restaurantStatus", value, { shouldValidate: true })
+            setValue(
+              "status",
+              value as unknown as "true" | "false",
+              {
+                shouldValidate: true,
+              } as unknown as Partial<{
+                shouldValidate: boolean;
+                shouldDirty: boolean;
+                shouldTouch: boolean;
+              }>
+            )
           }
           options={[
-            { value: "Open Now", label: "Open Now" },
-            { value: "Closed", label: "Closed" },
+            { value: "", label: "Choose Restaurant status" },
+            { value: "true", label: "Open Now" },
+            { value: "false" as unknown as "true" | "false", label: "Closed" },
           ]}
-          error={errors.restaurantStatus?.message}
+          error={errors.status?.message}
         />
         <div className="grid grid-cols-2 gap-4">
           <Button

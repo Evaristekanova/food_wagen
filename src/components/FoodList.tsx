@@ -56,6 +56,7 @@ const FoodList: React.FC<FoodListProps> = ({
 
   const hasSearchQuery = searchQuery?.trim();
   const hasNoResults = hasSearchQuery && meals.length === 0;
+  const isEmpty = !hasSearchQuery && meals.length === 0;
   const visibleMeals = meals?.slice(0, visibleCount) || [];
   const hasMoreItems = meals.length > visibleCount;
 
@@ -73,6 +74,17 @@ const FoodList: React.FC<FoodListProps> = ({
           <p className="text-sm sm:text-base text-food-dark-gray-3 text-center max-w-md px-4">
             We couldn&apos;t find any meals matching &quot;{searchQuery?.trim()}
             &quot;. Try searching with a different term.
+          </p>
+        </div>
+      ) : isEmpty ? (
+        <div className="flex flex-col items-center justify-center py-12 sm:py-16 md:py-20 gap-3 sm:gap-4 px-4">
+          <SearchX className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 text-food-dark-gray-3" />
+          <h2 className="text-xl sm:text-2xl font-bold text-food-dark-gray-1 text-center">
+            No meals available
+          </h2>
+          <p className="text-sm sm:text-base text-food-dark-gray-3 text-center max-w-md px-4">
+            There are no meals in the database yet. Add your first meal to get
+            started!
           </p>
         </div>
       ) : (
