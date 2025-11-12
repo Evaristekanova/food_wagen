@@ -24,9 +24,11 @@ jest.mock("../MealMenu", () => ({
 // Mock next/image
 jest.mock("next/image", () => ({
   __esModule: true,
-  default: (props: React.ImgHTMLAttributes<HTMLImageElement>) => {
+  default: (props: React.ImgHTMLAttributes<HTMLImageElement> & { unoptimized?: boolean }) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { unoptimized, ...imgProps } = props;
     // eslint-disable-next-line @next/next/no-img-element, jsx-a11y/alt-text
-    return <img {...props} />;
+    return <img {...imgProps} />;
   },
 }));
 

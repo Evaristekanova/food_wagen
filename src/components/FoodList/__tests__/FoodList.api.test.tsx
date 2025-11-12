@@ -2,7 +2,7 @@ import React from "react";
 import { render, screen, waitFor } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useMeal } from "@/src/hooks/useMeal/useMeal";
-import FoodList from "../../FoodList";
+import FoodList from "../FoodList";
 import { mealService } from "@/src/services/mealService";
 import { Meal } from "@/src/types/meal";
 

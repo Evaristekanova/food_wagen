@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
 import { useModal } from "../hooks/useModal";
 import Navbar from "@/src/components/ui/Navbar";
 import { useDeleteMealById, useMeal } from "@/src/hooks/useMeal/useMeal";
-import FoodList from "@/src/components/FoodList";
+import FoodList from "@/src/components/FoodList/FoodList";
 import Footer from "@/src/components/ui/Footer";
 import Header from "@/src/components/Header";
 import { useQueryClient } from "@tanstack/react-query";

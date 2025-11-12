@@ -1,8 +1,8 @@
 "use client";
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import FoodCard from "./ui/FoodCard";
+import FoodCard from "../ui/FoodCard";
 import { Meal } from "@/src/types/meal";
-import Loader from "./ui/Loader";
+import Loader from "../ui/Loader";
 import { SearchX } from "lucide-react";
 
 interface FoodListProps {
@@ -25,7 +25,6 @@ const FoodList: React.FC<FoodListProps> = ({
   const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
   const prevMealsLengthRef = useRef(meals.length);
   const prevSearchQueryRef = useRef(searchQuery);
-  const observerTarget = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const mealsLengthChanged = prevMealsLengthRef.current !== meals.length;
@@ -48,32 +47,6 @@ const FoodList: React.FC<FoodListProps> = ({
       return Math.min(newCount, meals.length);
     });
   }, [meals.length]);
-
-  // Intersection Observer for infinite scroll
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting && meals.length > visibleCount) {
-          handleLoadMore();
-        }
-      },
-      {
-        rootMargin: "100px", // Start loading 100px before the element is visible
-        threshold: 0.1,
-      }
-    );
-
-    const currentTarget = observerTarget.current;
-    if (currentTarget && meals.length > visibleCount) {
-      observer.observe(currentTarget);
-    }
-
-    return () => {
-      if (currentTarget) {
-        observer.unobserve(currentTarget);
-      }
-    };
-  }, [visibleCount, meals.length, handleLoadMore]);
 
   if (isLoading) {
     return (
@@ -129,11 +102,14 @@ const FoodList: React.FC<FoodListProps> = ({
             ))}
           </div>
           {hasMoreItems && (
-            <div
-              ref={observerTarget}
-              className="flex justify-center mt-8 sm:mt-10 py-4"
-            >
-              <Loader />
+            <div className="flex justify-center mt-8 sm:mt-10 py-4">
+              <button
+                onClick={handleLoadMore}
+                className="px-6 py-3 bg-food-yellow-1 text-white rounded-lg font-semibold shadow-[0_4px_12px_0_rgba(255,179,14,0.3)] shadow-food-yellow-1/30
+                 hover:bg-food-yellow-1/90 transition-colors duration-200 hover:shadow-lg cursor-pointer"
+              >
+                Load More
+              </button>
             </div>
           )}
         </>

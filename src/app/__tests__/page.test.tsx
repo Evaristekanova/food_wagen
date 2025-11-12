@@ -46,7 +46,7 @@ jest.mock("@/src/components/Header", () => ({
   ),
 }));
 
-jest.mock("@/src/components/FoodList", () => ({
+jest.mock("@/src/components/FoodList/FoodList", () => ({
   __esModule: true,
   default: ({
     meals,

@@ -50,7 +50,8 @@ describe("Button Component Rendering", () => {
 
     const button = screen.getByRole("button") as HTMLButtonElement;
     expect(button.disabled).toBe(true);
-    expect(button.className).toContain("opacity-70 cursor-not-allowed");
+    expect(button.className).toContain("opacity-70");
+    expect(button.className).toContain("disabled:cursor-not-allowed");
   });
 
   it("should render button with default loading text when isLoading is true", () => {

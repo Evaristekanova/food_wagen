@@ -22,7 +22,7 @@ export const Button: React.FC<ButtonProps> = ({
   return (
     <button
       className={`${className} ${
-        disabled || isLoading ? "opacity-70 cursor-not-allowed" : ""
+        disabled || isLoading ? "opacity-70  disabled:cursor-not-allowed" : ""
       }`}
       disabled={disabled || isLoading}
       {...props}
